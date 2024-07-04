@@ -10,6 +10,7 @@ import { ThemeSwitcherBtn } from "./ThemeSwitcherBtn";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { Menu } from "lucide-react";
 
+// Головний компонент NavBar, який містить як десктопну, так і мобільну навігацію
 function NavBar() {
   return (
     <>
@@ -19,12 +20,14 @@ function NavBar() {
   );
 }
 
+// Масив з елементами навігації
 const items = [
   { label: "Dashboard", link: "/" },
   { label: "Transactions", link: "/transactions" },
   { label: "Manage", link: "/manage" },
 ];
 
+// Компонент для десктопної версії навігації
 function DesktopNavbar() {
   return (
     <div className="hidden border-separate border-b bg-background md:block">
@@ -50,6 +53,7 @@ function DesktopNavbar() {
   );
 }
 
+// Компонент для мобільної версії навігації
 function MobileNavbar() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -88,6 +92,7 @@ function MobileNavbar() {
   );
 }
 
+// Компонент для окремого елемента навігації
 function NavbarItem({
   link,
   label,
