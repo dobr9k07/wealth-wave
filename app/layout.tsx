@@ -9,6 +9,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import RootProviders from "@/components/providers/RootProviders";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -41,6 +42,7 @@ export default function RootLayout({
               <UserButton />
             </SignedIn>
           </header> */}
+          <Toaster richColors position="bottom-right" />
           <RootProviders>{children}</RootProviders>
         </body>
       </html>
