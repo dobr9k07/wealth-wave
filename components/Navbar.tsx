@@ -1,20 +1,16 @@
 "use client";
-import React, { useState } from "react";
-import Logo, { LogoMobile } from "./Logo";
-import { UserButton } from "@clerk/nextjs";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
+import Logo, { LogoMobile } from "@/components/Logo";
+import { ThemeSwitcherBtn } from "@/components/ThemeSwitcherBtn";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from "./ui/button";
-import { ThemeSwitcherBtn } from "./ThemeSwitcherBtn";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { UserButton } from "@clerk/nextjs";
 import { Menu } from "lucide-react";
-import SvgIcon from "./SvgIcon";
-import { IconId } from "@/enums/iconSpriteId";
-import LogoSvg from "./LogoSvg";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React, { useState } from "react";
 
-// Головний компонент NavBar, який містить як десктопну, так і мобільну навігацію
-function NavBar() {
+function Navbar() {
   return (
     <>
       <DesktopNavbar />
@@ -23,52 +19,12 @@ function NavBar() {
   );
 }
 
-// Масив з елементами навігації
 const items = [
   { label: "Dashboard", link: "/" },
   { label: "Transactions", link: "/transactions" },
   { label: "Manage", link: "/manage" },
 ];
 
-// Компонент для десктопної версії навігації
-function DesktopNavbar() {
-  return (
-    <div className="hidden border-separate border-b bg-background md:block">
-      <nav className="container flex items-center justify-between px-8">
-        <div className="flex h-[80px] min-h-[60px] items-center gap-x-4">
-          {/* <Logo /> */}
-
-          {/* <LogoSvg width={66} fill="#89169e" /> */}
-
-          <SvgIcon
-            // className="stroke h-11 w-11"
-            iconId={IconId.IconLogoAuth}
-            size={66}
-          />
-          <p className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-3xl font-bold leading-tight tracking-tighter text-transparent">
-            Wealthe Wave
-          </p>
-
-          <div className="flex h-full">
-            {items.map((item) => (
-              <NavbarItem
-                key={item.label}
-                link={item.link}
-                label={item.label}
-              />
-            ))}
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <ThemeSwitcherBtn />
-          <UserButton afterSignOutUrl="/sign-in" />
-        </div>
-      </nav>
-    </div>
-  );
-}
-
-// Компонент для мобільної версії навігації
 function MobileNavbar() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -107,7 +63,31 @@ function MobileNavbar() {
   );
 }
 
-// Компонент для окремого елемента навігації
+function DesktopNavbar() {
+  return (
+    <div className="hidden border-separate border-b bg-background md:block">
+      <nav className="container flex items-center justify-between px-8">
+        <div className="flex h-[80px] min-h-[60px] items-center gap-x-4">
+          <Logo />
+          <div className="flex h-full">
+            {items.map((item) => (
+              <NavbarItem
+                key={item.label}
+                link={item.link}
+                label={item.label}
+              />
+            ))}
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <ThemeSwitcherBtn />
+          <UserButton afterSignOutUrl="/sign-in" />
+        </div>
+      </nav>
+    </div>
+  );
+}
+
 function NavbarItem({
   link,
   label,
@@ -142,4 +122,4 @@ function NavbarItem({
   );
 }
 
-export default NavBar;
+export default Navbar;

@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { Skeleton } from "./ui/skeleton";
 import { cn } from "@/lib/utils";
 
-function SceletonWrapper({
+function SkeletonWrapper({
   children,
   isLoading,
   fullWidth = true,
@@ -20,4 +20,4 @@ function SceletonWrapper({
   );
 }
 
-export default SceletonWrapper;
+export default SkeletonWrapper;
