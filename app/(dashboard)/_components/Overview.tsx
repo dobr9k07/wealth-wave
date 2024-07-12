@@ -1,6 +1,6 @@
 "use client";
 
-import { DateRangePicker } from "@/components/ui/date-range-picker";
+import { DateRangePicker } from "@/components/ui/date-range-picker"; //!?
 import { MAX_DATE_RANGE_DAYS } from "@/lib/constans";
 import { UserSettings } from "@prisma/client";
 import { differenceInDays, startOfMonth } from "date-fns";
@@ -26,7 +26,7 @@ function Overview({ userSettings }: { userSettings: UserSettings }) {
             showCompare={false}
             onUpdate={(values) => {
               const { from, to } = values.range;
-              // We update the date range only if both dates are set
+              // Ми оновлюємо діапазон дат, тільки якщо встановлені обидві дати
 
               if (!from || !to) return;
               if (differenceInDays(to, from) > MAX_DATE_RANGE_DAYS) {
