@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -22,34 +23,35 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { TransactionType } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { TransactionType } from "@/lib/types"; // Імпортуємо тип транзакції
+import { cn } from "@/lib/utils"; // Імпортуємо утиліту для об'єднання класів
 import {
   CreateCategorySchema,
   CreateCategorySchemaType,
-} from "@/schema/categories";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { DialogClose, DialogTitle } from "@radix-ui/react-dialog";
+} from "@/schema/categories"; // Імпортуємо схему для створення категорії
+import { zodResolver } from "@hookform/resolvers/zod"; // Імпортуємо резолвер Zod для форми
+import { DialogClose, DialogTitle } from "@radix-ui/react-dialog"; // Імпортуємо компоненти діалогового вікна від Radix
 import { CircleOff, Loader2, PlusSquare } from "lucide-react";
 import React, { ReactNode, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import Picker from "@emoji-mart/react"; //!?
-import data from "@emoji-mart/data";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreateCategory } from "../_actions/categories";
-import { Category } from "@prisma/client";
+import Picker from "@emoji-mart/react"; // Імпортуємо компонент для вибору емодзі
+import data from "@emoji-mart/data"; // Імпортуємо дані для емодзі
+import { useMutation, useQueryClient } from "@tanstack/react-query"; // Імпортуємо хук для мутацій та клієнт запитів
+import { CreateCategory } from "../_actions/categories"; // Імпортуємо функцію створення категорії
+import { Category } from "@prisma/client"; // Імпортуємо тип категорії з Prisma
 import { toast } from "sonner";
-import { useTheme } from "next-themes";
+import { useTheme } from "next-themes"; // Імпортуємо хук для теми
 
 interface Props {
-  type: TransactionType;
-  successCallback: (category: Category) => void;
-  trigger?: ReactNode;
+  type: TransactionType; // Властивість для типу транзакції (дохід або витрата)
+  successCallback: (category: Category) => void; // Колбек для успішного створення категорії
+  trigger?: ReactNode; // Триггер для відкриття діалогу
 }
 
 function CreateCategoryDialog({ type, successCallback, trigger }: Props) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // Стейт для відкриття/закриття діалогу
 
+  // Використовуємо хук useForm для керування формою
   const form = useForm<CreateCategorySchemaType>({
     resolver: zodResolver(CreateCategorySchema),
     defaultValues: {
@@ -57,9 +59,10 @@ function CreateCategoryDialog({ type, successCallback, trigger }: Props) {
     },
   });
 
-  const queryClient = useQueryClient();
-  const theme = useTheme();
+  const queryClient = useQueryClient(); // Використовуємо клієнт запитів
+  const theme = useTheme(); // Використовуємо хук для теми
 
+  // Використовуємо хук useMutation для створення категорії
   const { mutate, isPending } = useMutation({
     mutationFn: CreateCategory,
     onSuccess: async (data: Category) => {
@@ -88,6 +91,7 @@ function CreateCategoryDialog({ type, successCallback, trigger }: Props) {
     },
   });
 
+  // Колбек для відправки форми
   const onSubmit = useCallback(
     (values: CreateCategorySchemaType) => {
       toast.loading("Creating category...", {

@@ -6,20 +6,25 @@ import { CreateTransactionSchema } from "@/schema/transaction";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
+// Функція для створення нової транзакції
 export async function CreateTransaction(form: CreateCategorySchemaType) {
+  // Перевіряємо дані форми за допомогою схеми
   const parsedBody = CreateTransactionSchema.safeParse(form);
 
   if (!parsedBody.success) {
-    throw new Error(parsedBody.error.message);
+    throw new Error(parsedBody.error.message); // Якщо дані невірні, кидаємо помилку
   }
 
+  // Отримуємо поточного користувача
   const user = await currentUser();
   if (!user) {
-    redirect("/sign-in");
+    redirect("/sign-in"); // Якщо користувач не авторизований, перенаправляємо на сторінку входу
   }
 
+  // Дістаємо дані з перевіреного об'єкта
   const { amount, category, date, description, type } = parsedBody.data;
 
+  // Знаходимо категорію для поточного користувача
   const categoryRow = await prisma.category.findFirst({
     where: {
       userId: user.id,
@@ -28,12 +33,12 @@ export async function CreateTransaction(form: CreateCategorySchemaType) {
   });
 
   if (!categoryRow) {
-    throw new Error("category not found");
+    throw new Error("category not found"); // Якщо категорія не знайдена, кидаємо помилку
   }
 
-  // NOTE: don't make confusion between $transaction ( prisma ) and prisma.transaction (table)
+  // Виконуємо транзакцію, яка включає створення транзакції та оновлення агрегатних таблиць
   await prisma.$transaction([
-    // Create user transaction
+    // Створюємо транзакцію користувача
     prisma.transaction.create({
       data: {
         userId: user.id,
@@ -46,7 +51,7 @@ export async function CreateTransaction(form: CreateCategorySchemaType) {
       },
     }),
 
-    // Update month aggregate table
+    // Оновлюємо місячну агрегатну таблицю
     prisma.monthHistory.upsert({
       where: {
         day_month_year_userId: {
@@ -74,7 +79,7 @@ export async function CreateTransaction(form: CreateCategorySchemaType) {
       },
     }),
 
-    // Update year aggreate
+    // Оновлюємо річну агрегатну таблицю
     prisma.yearHistory.upsert({
       where: {
         month_year_userId: {

@@ -1,10 +1,10 @@
 "use client";
 
-import { Category } from "@prisma/client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ReactNode } from "react";
-import { DeleteCategory } from "../_actions/categories";
-import { toast } from "sonner";
+import { Category } from "@prisma/client"; // Імпортуємо тип для категорії
+import { useMutation, useQueryClient } from "@tanstack/react-query"; // Імпортуємо хук для мутацій та клієнт запитів
+import { ReactNode } from "react"; // Імпортуємо ReactNode для типізації тригера
+import { DeleteCategory } from "../_actions/categories"; // Імпортуємо функцію для видалення категорії
+import { toast } from "sonner"; // Імпортуємо бібліотеку для сповіщень
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,27 +15,27 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { TransactionType } from "@/lib/types";
+} from "@/components/ui/alert-dialog"; // Імпортуємо компоненти для діалогового вікна
+import { TransactionType } from "@/lib/types"; // Імпортуємо тип для транзакцій
 
 interface Props {
-  trigger: ReactNode;
-  category: Category;
+  trigger: ReactNode; // Компонент або елемент, який буде тригером для відкриття діалогового вікна
+  category: Category; // Категорія, яку потрібно видалити
 }
 
 function DeleteCategoryDialog({ category, trigger }: Props) {
-  const categoryIdentifier = `${category.name}-${category.type}`;
-  const queryClient = useQueryClient();
+  const categoryIdentifier = `${category.name}-${category.type}`; // Унікальний ідентифікатор категорії
+  const queryClient = useQueryClient(); // Хук для доступу до клієнта запитів
 
   const deleteMutation = useMutation({
-    mutationFn: DeleteCategory,
+    mutationFn: DeleteCategory, // Функція для видалення категорії
     onSuccess: async () => {
       toast.success("Category deleted successfully", {
         id: categoryIdentifier,
       });
 
       await queryClient.invalidateQueries({
-        queryKey: ["categories"],
+        queryKey: ["categories"], // Оновлюємо запити для категорій після видалення
       });
     },
     onError: () => {
@@ -44,6 +44,7 @@ function DeleteCategoryDialog({ category, trigger }: Props) {
       });
     },
   });
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>

@@ -9,17 +9,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { TransactionType } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { TransactionType } from "@/lib/types"; // Імпортуємо тип транзакції
+import { cn } from "@/lib/utils"; // Імпортуємо утиліту для об'єднання класів
 import {
   CreateTransactionSchema,
   CreateTransactionSchemaType,
-} from "@/schema/transaction";
+} from "@/schema/transaction"; // Імпортуємо схему валідації транзакції
 import { ReactNode, useCallback, useState } from "react";
 
 import React from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from "@hookform/resolvers/zod"; // Імпортуємо резолвер для валідації форм
 import {
   Form,
   FormControl,
@@ -29,36 +29,39 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import CategoryPicker from "@/app/(dashboard)/_components/CategoryPicker";
+import { Input } from "@/components/ui/input"; // Імпортуємо компонент інпуту
+import CategoryPicker from "@/app/(dashboard)/_components/CategoryPicker"; // Імпортуємо компонент для вибору категорії
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
+import { format } from "date-fns"; // Імпортуємо бібліотеку для роботи з датами
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreateTransaction } from "@/app/(dashboard)/_actions/transactions";
-import { toast } from "sonner";
-import { DateToUTCDate } from "@/lib/helpers";
+import { CreateTransaction } from "@/app/(dashboard)/_actions/transactions"; // Імпортуємо функцію для створення транзакції
+import { toast } from "sonner"; // Імпортуємо бібліотеку для сповіщень
+import { DateToUTCDate } from "@/lib/helpers"; // Імпортуємо хелпер для конвертації дати
 
 interface Props {
-  trigger: ReactNode;
-  type: TransactionType;
+  trigger: ReactNode; // Властивість для тригера діалогового вікна
+  type: TransactionType; // Властивість для типу транзакції (дохід або витрата)
 }
 
 function CreateTransactionDialog({ trigger, type }: Props) {
+  // Використовуємо useForm для роботи з формою
   const form = useForm<CreateTransactionSchemaType>({
-    resolver: zodResolver(CreateTransactionSchema),
+    resolver: zodResolver(CreateTransactionSchema), // Задаємо схему валідації
     defaultValues: {
       type,
-      date: new Date(),
+      date: new Date(), // Встановлюємо початкове значення дати
     },
   });
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // Стейт для відкриття/закриття діалогового вікна
+
+  // Функція для зміни категорії
   const handleCategoryChange = useCallback(
     (value: string) => {
       form.setValue("category", value);
@@ -66,8 +69,9 @@ function CreateTransactionDialog({ trigger, type }: Props) {
     [form]
   );
 
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient(); // Використовуємо useQueryClient для роботи з кешем
 
+  // Використовуємо useMutation для створення транзакції
   const { mutate, isPending } = useMutation({
     mutationFn: CreateTransaction,
     onSuccess: () => {
@@ -83,22 +87,23 @@ function CreateTransactionDialog({ trigger, type }: Props) {
         category: undefined,
       });
 
-      // After creating a transaction, we need to invalidate the overview query which will refetch data in the homepage
+      // Після створення транзакції, необхідно інвалідувати запит overview, щоб оновити дані на головній сторінці
       queryClient.invalidateQueries({
         queryKey: ["overview"],
       });
 
-      setOpen((prev) => !prev);
+      setOpen((prev) => !prev); // Закриваємо діалогове вікно
     },
   });
 
+  // Функція для обробки відправки форми
   const onSubmit = useCallback(
     (values: CreateTransactionSchemaType) => {
       toast.loading("Creating transaction...", { id: "create-transaction" });
 
       mutate({
         ...values,
-        date: DateToUTCDate(values.date),
+        date: DateToUTCDate(values.date), // Конвертуємо дату в UTC
       });
     },
     [mutate]
@@ -242,4 +247,4 @@ function CreateTransactionDialog({ trigger, type }: Props) {
   );
 }
 
-export default CreateTransactionDialog;
+export default CreateTransactionDialog; // Експортуємо компонент за замовчуванням

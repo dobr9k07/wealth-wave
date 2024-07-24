@@ -3,16 +3,17 @@ import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import React from "react";
-import CreateTransactionDialog from "./_components/CreateTransactionDialog";
-import Overview from "./_components/Overview";
-import History from "./_components/History";
+import CreateTransactionDialog from "./_components/CreateTransactionDialog"; // Імпортуємо компонент для створення транзакцій
+import Overview from "./_components/Overview"; // Імпортуємо компонент для відображення огляду
+import History from "./_components/History"; // Імпортуємо компонент для відображення історії
 
 async function page() {
-  const user = await currentUser();
+  const user = await currentUser(); // Отримуємо поточного користувача
   if (!user) {
-    redirect("/sign-in");
+    redirect("/sign-in"); // Редирект на сторінку входу, якщо користувач не авторизований
   }
 
+  // Отримуємо налаштування користувача з бази даних
   const userSettings = await prisma.userSettings.findUnique({
     where: {
       userId: user.id,
@@ -20,7 +21,7 @@ async function page() {
   });
 
   if (!userSettings) {
-    redirect("/wizard");
+    redirect("/wizard"); // Редирект на сторінку налаштувань, якщо налаштування не знайдені
   }
 
   return (

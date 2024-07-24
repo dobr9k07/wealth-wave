@@ -1,12 +1,12 @@
 "use client";
 
-import { GetCategoriesStatsResponseType } from "@/app/api/stats/categories/route";
-import SkeletonWrapper from "@/components/SkeletonWrapper";
+import { GetCategoriesStatsResponseType } from "@/app/api/stats/categories/route"; // Імпортуємо тип для відповіді з API
+import SkeletonWrapper from "@/components/SkeletonWrapper"; // Імпортуємо компонент для відображення скелетонів під час завантаження
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { DateToUTCDate, GetFormatterForCurrency } from "@/lib/helpers";
-import { TransactionType } from "@/lib/types";
+import { DateToUTCDate, GetFormatterForCurrency } from "@/lib/helpers"; // Імпортуємо допоміжні функції
+import { TransactionType } from "@/lib/types"; // Імпортуємо тип транзакцій
 import { UserSettings } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import React, { useMemo } from "react";
@@ -17,7 +17,9 @@ interface Props {
   to: Date;
 }
 
+// Основний компонент для відображення статистики категорій
 function CategoriesStats({ userSettings, from, to }: Props) {
+  // Виконуємо запит для отримання статистики категорій
   const statsQuery = useQuery<GetCategoriesStatsResponseType>({
     queryKey: ["overview", "stats", "categories", from, to],
     queryFn: () =>
@@ -28,6 +30,7 @@ function CategoriesStats({ userSettings, from, to }: Props) {
       ).then((res) => res.json()),
   });
 
+  // Форматувач для валюти
   const formatter = useMemo(() => {
     return GetFormatterForCurrency(userSettings.currency);
   }, [userSettings.currency]);
@@ -54,6 +57,7 @@ function CategoriesStats({ userSettings, from, to }: Props) {
 
 export default CategoriesStats;
 
+// Компонент для відображення картки статистики категорій
 function CategoriesCard({
   data,
   type,
@@ -63,7 +67,9 @@ function CategoriesCard({
   formatter: Intl.NumberFormat;
   data: GetCategoriesStatsResponseType;
 }) {
+  // Фільтруємо дані по типу транзакцій (доходи або витрати)
   const filteredData = data.filter((el) => el.type === type);
+  // Обчислюємо загальну суму для обраного типу транзакцій
   const total = filteredData.reduce(
     (acc, el) => acc + (el._sum?.amount || 0),
     0
@@ -93,6 +99,7 @@ function CategoriesCard({
             <div className="flex w-full flex-col gap-4 p-4">
               {filteredData.map((item) => {
                 const amount = item._sum.amount || 0;
+                // Обчислюємо відсоток для кожної категорії
                 const percentage = (amount * 100) / (total || amount);
 
                 return (

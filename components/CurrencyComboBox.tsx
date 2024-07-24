@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,26 +17,27 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Currencies, Currency } from "@/lib/currencies";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import SceletonWrapper from "./SkeletonWrapper";
-import { UserSettings } from "@prisma/client";
-import { UpdateUserCurrency } from "@/app/wizard/_actions/userSettings";
-import { toast } from "sonner";
+import { Currencies, Currency } from "@/lib/currencies"; // Імпортуємо дані про валюти
+import { useMutation, useQuery } from "@tanstack/react-query"; // Імпортуємо хуки для управління запитами
+import SceletonWrapper from "./SkeletonWrapper"; // Імпортуємо компонент обгортки скелету
+import { UserSettings } from "@prisma/client"; // Імпортуємо типи з Prisma
+import { UpdateUserCurrency } from "@/app/wizard/_actions/userSettings"; // Імпортуємо функцію для оновлення налаштувань користувача
+import { toast } from "sonner"; // Імпортуємо бібліотеку для відображення сповіщень
 
 export function CurrencyComboBox() {
-  const [open, setOpen] = React.useState(false);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [open, setOpen] = React.useState(false); // Стан для контролю відкриття спливаючого вікна або панелі
+  const isDesktop = useMediaQuery("(min-width: 768px)"); // Перевірка, чи є користувач на десктопі
   const [selectedOption, setSelectedOption] = React.useState<Currency | null>(
     null
-  );
+  ); // Стан для зберігання обраної валюти
 
+  // Запит для отримання налаштувань користувача
   const userSettings = useQuery<UserSettings>({
     queryKey: ["userSettings"],
     queryFn: () => fetch("/api/user-settings").then((res) => res.json()),
   });
 
-  //Встановлюємо налаштування за замовчуванням (гривня)
+  // Встановлюємо налаштування за замовчуванням (гривня)
   React.useEffect(() => {
     if (!userSettings.data) return;
     const userCurrency = Currencies.find(
@@ -46,10 +46,11 @@ export function CurrencyComboBox() {
     if (userCurrency) setSelectedOption(userCurrency);
   }, [userSettings.data]);
 
+  // Мутація для оновлення валюти користувача
   const mutation = useMutation({
     mutationFn: UpdateUserCurrency,
     onSuccess: (data: UserSettings) => {
-      toast.success(`Currency updated successuflly 🎉`, {
+      toast.success(`Currency updated successfully 🎉`, {
         id: "update-currency",
       });
 
@@ -65,6 +66,7 @@ export function CurrencyComboBox() {
     },
   });
 
+  // Функція для вибору опції
   const selectOption = React.useCallback(
     (currency: Currency | null) => {
       if (!currency) {
@@ -81,6 +83,7 @@ export function CurrencyComboBox() {
     [mutation]
   );
 
+  // Відображення для десктопу
   if (isDesktop) {
     return (
       <SceletonWrapper isLoading={userSettings.isFetching}>
@@ -102,6 +105,7 @@ export function CurrencyComboBox() {
     );
   }
 
+  // Відображення для мобільних пристроїв
   return (
     <SceletonWrapper isLoading={userSettings.isFetching}>
       <Drawer open={open} onOpenChange={setOpen}>
@@ -124,6 +128,7 @@ export function CurrencyComboBox() {
   );
 }
 
+// Компонент для списку опцій
 function OptionList({
   setOpen,
   setSelectedOption,
