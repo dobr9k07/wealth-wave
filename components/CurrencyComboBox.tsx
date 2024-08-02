@@ -21,8 +21,9 @@ import { Currencies, Currency } from "@/lib/currencies"; // Імпортуємо
 import { useMutation, useQuery } from "@tanstack/react-query"; // Імпортуємо хуки для управління запитами
 import SceletonWrapper from "./SkeletonWrapper"; // Імпортуємо компонент обгортки скелету
 import { UserSettings } from "@prisma/client"; // Імпортуємо типи з Prisma
-import { UpdateUserCurrency } from "@/app/wizard/_actions/userSettings"; // Імпортуємо функцію для оновлення налаштувань користувача
+// import { UpdateUserCurrency } from "@/app/wizard/_actions/userSettings"; // Імпортуємо функцію для оновлення налаштувань користувача
 import { toast } from "sonner"; // Імпортуємо бібліотеку для відображення сповіщень
+import { UpdateUserCurrency } from "@/app/[locale]/wizard/_actions/userSettings";
 
 export function CurrencyComboBox() {
   const [open, setOpen] = React.useState(false); // Стан для контролю відкриття спливаючого вікна або панелі

@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import { toast } from "sonner";
 import StatsCards from "./StatsCards";
 import CategoriesStats from "./CategoriesStats";
+import { useTranslations } from "next-intl";
 
 function Overview({ userSettings }: { userSettings: UserSettings }) {
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
@@ -15,10 +16,14 @@ function Overview({ userSettings }: { userSettings: UserSettings }) {
     to: new Date(),
   });
 
+  const t = useTranslations("HomePage");
+
   return (
     <>
       <div className="container flex flex-wrap items-end justify-between gap-2 py-6">
-        <h2 className="text-3xl font-bold">Overview</h2>
+        <h2 className="text-3xl font-bold">
+          {t("overview").toLocaleUpperCase()}
+        </h2>
         <div className="flex items-center gap-3">
           <DateRangePicker
             initialDateFrom={dateRange.from}
@@ -31,7 +36,10 @@ function Overview({ userSettings }: { userSettings: UserSettings }) {
               if (!from || !to) return;
               if (differenceInDays(to, from) > MAX_DATE_RANGE_DAYS) {
                 toast.error(
-                  `The selected date range is too big. Max allowed range is ${MAX_DATE_RANGE_DAYS} days!`
+                  // `The selected date range is too big. Max allowed range is ${MAX_DATE_RANGE_DAYS} days!`
+                  `${t("theSelectedDate")}. ${t(
+                    "maxAllowedRange"
+                  )} ${MAX_DATE_RANGE_DAYS} ${t("maxAllowedDays")}!`
                 );
                 return;
               }

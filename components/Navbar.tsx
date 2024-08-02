@@ -11,23 +11,32 @@ import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import SvgIcon from "./SvgIcon";
 import { IconId } from "@/enums/iconSpriteId";
+import { useLocale, useTranslations } from "next-intl";
+import LocaleSwitcher from "./LocaleSwitcher";
+
+interface Props {
+  label: string;
+  link: string;
+}
 
 function Navbar() {
+  const t = useTranslations("NavBar");
+  const localeActive = useLocale(); // Отримуємо поточну локаль
+
+  const items: Props[] = [
+    { label: t("dashboard"), link: `/${localeActive}/` },
+    { label: t("transactions"), link: `/${localeActive}/transactions` },
+    { label: t("manage"), link: `/${localeActive}/manage` },
+  ];
   return (
     <>
-      <DesktopNavbar />
-      <MobileNavbar />
+      <DesktopNavbar items={items} />
+      <MobileNavbar items={items} />
     </>
   );
 }
 
-const items = [
-  { label: "Dashboard", link: "/" },
-  { label: "Transactions", link: "/transactions" },
-  { label: "Manage", link: "/manage" },
-];
-
-function MobileNavbar() {
+function MobileNavbar({ items }: { items: Props[] }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -58,6 +67,7 @@ function MobileNavbar() {
           <LogoMobile />
         </div>
         <div className="flex items-center gap-2">
+          <LocaleSwitcher />
           <ThemeSwitcherBtn />
           <UserButton afterSignOutUrl="/sign-in" />
         </div>
@@ -66,7 +76,7 @@ function MobileNavbar() {
   );
 }
 
-function DesktopNavbar() {
+function DesktopNavbar({ items }: { items: Props[] }) {
   return (
     <div className="hidden border-separate border-b bg-background md:block">
       <nav className="container flex items-center justify-between px-8">
@@ -84,6 +94,7 @@ function DesktopNavbar() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <LocaleSwitcher />
           <ThemeSwitcherBtn />
           <UserButton afterSignOutUrl="/sign-in" />
         </div>

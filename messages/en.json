@@ -1,0 +1,26 @@
+{
+  "HomePage": {
+    "balance": "Balance",
+    "expense": "Expense",
+    "income": "Income",
+    "expensesByCategory": "Expenses by category",
+    "history": "History",
+    "incomesByCategory": "Incomes by category",
+    "maxAllowedDays": "days",
+    "maxAllowedRange": "Max allowed range is",
+    "newExpense": "New expense",
+    "newIncome": "New income",
+    "noDataPeriod": "No data for the selected period",
+    "overview": "Overview",
+    "theSelectedDate": "The selected date range is too big",
+    "title": "Hello",
+    "transactions": "transactions",
+    "trySelectingPeriod": "Try selecting a different period or try adding new",
+    "trySelectingPeriodorTransactions": "Try selecting a different period or adding new transactions"
+  },
+  "NavBar": {
+    "dashboard": "Dashboard",
+    "manage": "Manage",
+    "transactions": "Transactions"
+  }
+}

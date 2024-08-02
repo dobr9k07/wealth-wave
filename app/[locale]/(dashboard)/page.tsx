@@ -6,6 +6,7 @@ import React from "react";
 import CreateTransactionDialog from "./_components/CreateTransactionDialog"; // Імпортуємо компонент для створення транзакцій
 import Overview from "./_components/Overview"; // Імпортуємо компонент для відображення огляду
 import History from "./_components/History"; // Імпортуємо компонент для відображення історії
+import { getTranslations } from "next-intl/server";
 
 async function page() {
   const user = await currentUser(); // Отримуємо поточного користувача
@@ -24,11 +25,15 @@ async function page() {
     redirect("/wizard"); // Редирект на сторінку налаштувань, якщо налаштування не знайдені
   }
 
+  const t = await getTranslations("HomePage");
+
   return (
     <div className="h-full bg-background">
       <div className="border-b bg-card">
         <div className="container flex flex-wrap items-center justify-between gap-6 py-8">
-          <p className="text-3xl font-bold">Hello, {user.firstName}! 👋</p>
+          <p className="text-3xl font-bold">
+            {t("title")}, {user.firstName}! 👋
+          </p>
 
           <div className="flex items-center gap-3">
             <CreateTransactionDialog
@@ -37,7 +42,7 @@ async function page() {
                   variant={"outline"}
                   className="border-emerald-500 bg-emerald-950 text-white hover:bg-emerald-700 hover:text-white"
                 >
-                  New income 🤑
+                  {t("newIncome")} 🤑
                 </Button>
               }
               type="income"
@@ -49,7 +54,7 @@ async function page() {
                   variant={"outline"}
                   className="border-rose-500 bg-rose-950 text-white hover:bg-rose-700 hover:text-white"
                 >
-                  New expense 😤
+                  {t("newExpense")} 😤
                 </Button>
               }
               type="expense"

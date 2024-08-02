@@ -30,7 +30,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input"; // Імпортуємо компонент інпуту
-import CategoryPicker from "@/app/(dashboard)/_components/CategoryPicker"; // Імпортуємо компонент для вибору категорії
+// import CategoryPicker from "@/app/(dashboard)/_components/CategoryPicker"; // Імпортуємо компонент для вибору категорії
 import {
   Popover,
   PopoverContent,
@@ -41,9 +41,11 @@ import { format } from "date-fns"; // Імпортуємо бібліотеку 
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreateTransaction } from "@/app/(dashboard)/_actions/transactions"; // Імпортуємо функцію для створення транзакції
+// import { CreateTransaction } from "@/app/(dashboard)/_actions/transactions"; // Імпортуємо функцію для створення транзакції
 import { toast } from "sonner"; // Імпортуємо бібліотеку для сповіщень
 import { DateToUTCDate } from "@/lib/helpers"; // Імпортуємо хелпер для конвертації дати
+import { CreateTransaction } from "../_actions/transactions"; // Імпортуємо функцію для створення транзакції
+import CategoryPicker from "./CategoryPicker";
 
 interface Props {
   trigger: ReactNode; // Властивість для тригера діалогового вікна

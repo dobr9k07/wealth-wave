@@ -1,6 +1,6 @@
 "use client";
 
-import { DeleteTransaction } from "@/app/(dashboard)/transactions/_actions/deleteTransaction";
+// import { DeleteTransaction } from "@/app/(dashboard)/transactions/_actions/deleteTransaction";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,6 +14,7 @@ import {
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import React from "react";
 import { toast } from "sonner";
+import { DeleteTransaction } from "../_actions/deleteTransaction";
 
 interface Props {
   open: boolean;

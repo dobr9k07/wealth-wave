@@ -14,7 +14,7 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { GetTransactionHistoryResponseType } from "@/app/api/transactions-history/route";
+// import { GetTransactionHistoryResponseType } from "@/app/api/transactions-history/route";
 
 import {
   Table,
@@ -45,6 +45,7 @@ import { DataTableFacetedFilter } from "@/components/datatable/FacetedFilter";
 import { DataTableViewOptions } from "@/components/datatable/ColumnToggle";
 import { download, generateCsv, mkConfig } from "export-to-csv";
 import DeleteTransactionDialog from "./DeleteTransactionDialog";
+import { GetTransactionHistoryResponseType } from "@/app/api/transactions-history/route";
 
 interface Props {
   from: Date;

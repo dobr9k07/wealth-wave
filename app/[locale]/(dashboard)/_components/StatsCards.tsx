@@ -1,11 +1,13 @@
 "use client";
 import { GetBalanceStatsResponseType } from "@/app/api/stats/balance/route";
+// import { GetBalanceStatsResponseType } from "@/app/api/stats/balance/route";
 import SkeletonWrapper from "@/components/SkeletonWrapper";
 import { Card } from "@/components/ui/card";
 import { DateToUTCDate, GetFormatterForCurrency } from "@/lib/helpers";
 import { UserSettings } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { TrendingDown, TrendingUp, Wallet } from "lucide-react";
+import { useTranslations } from "next-intl";
 import React, { ReactNode, useCallback, useMemo } from "react";
 import CountUp from "react-countup";
 
@@ -16,6 +18,8 @@ interface Props {
 }
 
 function StatsCards({ from, to, userSettings }: Props) {
+  const t = useTranslations("HomePage");
+
   const statsQuery = useQuery<GetBalanceStatsResponseType>({
     queryKey: ["overview", "stats", from, to],
     queryFn: () =>
@@ -39,7 +43,7 @@ function StatsCards({ from, to, userSettings }: Props) {
         <StatCard
           formatter={formatter}
           value={income}
-          title="Income"
+          title={t("income")}
           icon={
             <TrendingUp className="h-12 w-12 items-center rounded-lg p-2 text-emerald-500 bg-emerald-400/10" />
           }
@@ -50,7 +54,7 @@ function StatsCards({ from, to, userSettings }: Props) {
         <StatCard
           formatter={formatter}
           value={expense}
-          title="Expense"
+          title={t("expense")}
           icon={
             <TrendingDown className="h-12 w-12 items-center rounded-lg p-2 text-red-500 bg-red-400/10" />
           }
@@ -61,7 +65,7 @@ function StatsCards({ from, to, userSettings }: Props) {
         <StatCard
           formatter={formatter}
           value={balance}
-          title="Balance"
+          title={t("balance")}
           icon={
             <Wallet className="h-12 w-12 items-center rounded-lg p-2 text-violet-500 bg-violet-400/10" />
           }

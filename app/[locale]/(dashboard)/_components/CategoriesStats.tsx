@@ -1,6 +1,7 @@
 "use client";
 
-import { GetCategoriesStatsResponseType } from "@/app/api/stats/categories/route"; // Імпортуємо тип для відповіді з API
+import { GetCategoriesStatsResponseType } from "@/app/api/stats/categories/route";
+// import { GetCategoriesStatsResponseType } from "@/app/api/stats/categories/route"; // Імпортуємо тип для відповіді з API
 import SkeletonWrapper from "@/components/SkeletonWrapper"; // Імпортуємо компонент для відображення скелетонів під час завантаження
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -9,6 +10,7 @@ import { DateToUTCDate, GetFormatterForCurrency } from "@/lib/helpers"; // Ім�
 import { TransactionType } from "@/lib/types"; // Імпортуємо тип транзакцій
 import { UserSettings } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
+import { useLocale, useTranslations } from "next-intl";
 import React, { useMemo } from "react";
 
 interface Props {
@@ -75,21 +77,32 @@ function CategoriesCard({
     0
   );
 
+  const t = useTranslations("HomePage");
+  const localeActive = useLocale(); // Отримуємо поточну локаль
+
   return (
     <Card className="h-80 w-full col-span-6">
       <CardHeader>
         <CardTitle className="grid grid-flow-row justify-between gap-2 text-muted-foreground md:grid-flow-col">
-          {type === "income" ? "Incomes" : "Expenses"} by category
+          {type === "income"
+            ? `${t("expensesByCategory")}`
+            : `${t("incomesByCategory")}`}
         </CardTitle>
       </CardHeader>
 
       <div className="flex items-center justify-between gap-2">
         {filteredData.length === 0 && (
           <div className="flex h-60 w-full flex-col items-center justify-center">
-            No data for the selected period
+            {t("noDataPeriod")}
             <p className="text-sm text-muted-foreground">
-              Try selecting a different period or try adding new{" "}
-              {type === "income" ? "incomes" : "expenses"}
+              {t("trySelectingPeriod")}{" "}
+              {localeActive === "ua"
+                ? type === "income"
+                  ? `${t("income").toLocaleLowerCase()}`
+                  : `${t("expense").toLocaleLowerCase()}`
+                : type === "income"
+                ? `${t("income").toLocaleLowerCase()}s`
+                : `${t("expense").toLocaleLowerCase()}s`}
             </p>
           </div>
         )}

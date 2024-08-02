@@ -20,8 +20,10 @@ import {
   YAxis,
 } from "recharts";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 function History({ userSettings }: { userSettings: UserSettings }) {
+  const t = useTranslations("HomePage");
   const [timeframe, setTimeframe] = useState<Timeframe>("month");
   const [period, setPeriod] = useState<Period>({
     month: new Date().getMonth(),
@@ -45,7 +47,9 @@ function History({ userSettings }: { userSettings: UserSettings }) {
 
   return (
     <div className="container">
-      <h2 className="mt-12 text-3xl font-bold">History</h2>
+      <h2 className="mt-12 text-3xl font-bold">
+        {t("history").toLocaleUpperCase()}
+      </h2>
       <Card className="col-span-12 mt-2 w-full">
         <CardHeader className="gap-2">
           <CardTitle className="grid grid-flow-row justify-between gap-2 md:grid-flow-col">
@@ -62,14 +66,14 @@ function History({ userSettings }: { userSettings: UserSettings }) {
                 className="flex items-center gap-2 text-sm"
               >
                 <div className="h-4 w-4 rounded-full bg-emerald-500"></div>
-                Income
+                {t("income")}
               </Badge>
               <Badge
                 variant={"outline"}
                 className="flex items-center gap-2 text-sm"
               >
                 <div className="h-4 w-4 rounded-full bg-red-500"></div>
-                Expense
+                {t("expense")}
               </Badge>
             </div>
           </CardTitle>
@@ -165,9 +169,9 @@ function History({ userSettings }: { userSettings: UserSettings }) {
             )}
             {!dataAvailable && (
               <Card className="flex h-[300px] flex-col items-center justify-center bg-background">
-                No data for the selected period
+                {t("noDataPeriod")}
                 <p className="text-sm text-muted-foreground">
-                  Try selecting a different period or adding new transactions
+                  {t("trySelectingPeriodorTransactions")}
                 </p>
               </Card>
             )}
